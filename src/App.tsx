@@ -2,7 +2,16 @@ import { useState, useEffect } from 'react'
 import './App.css'
 
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/counter'
+// const isLocal = window.location.hostname === 'localhost' || 
+//                 window.location.hostname === '127.0.0.1';
+
+// const API_URL = isLocal
+//   ? 'http://localhost:8000/counter'
+//   : 'http://backend-service:8000/counter';
+
+const API_URL = 'http://backend-service:8000/counter';
+
+console.log(window.location.hostname)
 
 function App() {
   const [count, setCount] = useState(0)

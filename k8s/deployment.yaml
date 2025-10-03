@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
       - name: react-container
-        image: counter-frontend:latest
-        imagePullPolicy: Never
+        image: vasilijed/counter-frontend:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
         env:
