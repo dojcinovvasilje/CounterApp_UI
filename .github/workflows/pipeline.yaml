@@ -30,7 +30,7 @@ jobs:
         kubectl create namespace ${{ github.ref_name }} --dry-run=client -o yaml | kubectl apply -f -
         kubectl apply -f k8s/ -n ${{ github.ref_name }}
         kubectl set image deployment/counter-frontend-deployment \
-          frontend-container=vasilijed/counter-frontend:${{ github.sha }} -n ${{ github.ref_name }}
+          react-container=vasilijed/counter-frontend:${{ github.sha }} -n ${{ github.ref_name }}
 
     - name: Verify deployment
       run: |
