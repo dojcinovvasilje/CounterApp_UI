@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     
+    #komentar
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
