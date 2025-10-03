@@ -9,23 +9,25 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+    # 1. CHECKOUT CODE
     - name: Checkout code
       uses: actions/checkout@v4
 
+    # 2. BUILD DOCKER IMAGE
     - name: Build Frontend Docker image
       run: |
         docker build -t counter-frontend:${{ github.sha }} .
 
+    # 3. SETUP MINIKUBE
     - name: Set up Minikube
-      run: |
-        curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-        sudo install minikube-linux-amd64 /usr/local/bin/minikube
-        minikube start --driver=docker
+      uses: medyagh/setup-minikube@v1
 
+    # 4. LOAD TO MINIKUBE
     - name: Load frontend image to Minikube
       run: |
         minikube image load counter-frontend:${{ github.sha }}
 
+    # 5. DEPLOY TO KUBERNETES
     - name: Deploy frontend to namespace
       run: |
         kubectl create namespace ${{ github.ref_name }} --dry-run=client -o yaml | kubectl apply -f -
@@ -33,7 +35,8 @@ jobs:
         kubectl set image deployment/counter-frontend-deployment \
           frontend-container=counter-frontend:${{ github.sha }} -n ${{ github.ref_name }} || true
         
+    # 6. VERIFY
     - name: Verify frontend deployment
       run: |
         kubectl rollout status deployment/counter-frontend-deployment -n ${{ github.ref_name }} --timeout=300s
-        echo " Frontend deployed to ${{ github.ref_name }} namespace"
+        echo "Frontend deployed to ${{ github.ref_name }} namespace"
