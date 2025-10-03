@@ -9,7 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     
-    #komentar
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -20,8 +19,11 @@ jobs:
         echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
         docker push vasilijed/counter-frontend:${{ github.sha }}
 
-    - name: Set up Kubernetes
-      uses: azure/setup-kubectl@v3
+    - name: Set up K3D Kubernetes
+      run: |
+        curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
+        k3d cluster create ci-cluster --agents 1
+        k3d kubeconfig get ci-cluster > $HOME/.kube/config
 
     - name: Deploy frontend to namespace
       run: |
@@ -29,3 +31,7 @@ jobs:
         kubectl apply -f k8s/ -n ${{ github.ref_name }}
         kubectl set image deployment/counter-frontend-deployment \
           frontend-container=vasilijed/counter-frontend:${{ github.sha }} -n ${{ github.ref_name }}
+
+    - name: Verify deployment
+      run: |
+        kubectl rollout status deployment/counter-frontend-deployment -n ${{ github.ref_name }} --timeout=120s
