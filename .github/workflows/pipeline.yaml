@@ -12,29 +12,16 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Cache Minikube
-      id: cache-minikube
-      uses: actions/cache@v3
-      with:
-        path: |
-          /usr/local/bin/minikube
-          /tmp/minikube-cache
-        key: minikube-${{ runner.os }}
-
-    - name: Install Minikube if not cached
-      if: steps.cache-minikube.outputs.cache-hit != 'true'
+    - name: Set up Minikube
       run: |
         curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
         sudo install minikube-linux-amd64 /usr/local/bin/minikube
+        minikube start --driver=docker
+        minikube status
 
-    - name: Start Minikube
+    - name: Build Frontend Docker image using Minikube
       run: |
-        minikube start --driver=docker --container-runtime=containerd
-
-    - name: Build Frontend Docker image
-      run: |
-        eval $(minikube docker-env)
-        docker build -t counter-frontend:${{ github.sha }} .
+        minikube image build -t counter-frontend:${{ github.sha }} .
 
     - name: Deploy frontend to namespace
       run: |
