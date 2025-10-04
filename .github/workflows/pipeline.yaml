@@ -1,11 +1,11 @@
-name: Deploy Backend
+name: Deploy Frontend
 
 on:
   push:
     branches: [dev, qa, uat, master]
 
 jobs:
-  deploy-backend:
+  deploy-frontend:
     runs-on: self-hosted
     timeout-minutes: 3
     
@@ -22,17 +22,17 @@ jobs:
     - name: Build Docker image
       shell: cmd
       run: |
-        docker build -t vasilijed/counter-backend:${{ github.sha }} .
-        docker tag vasilijed/counter-backend:${{ github.sha }} vasilijed/counter-backend:latest
+        docker build -t vasilijed/counter-frontend:${{ github.sha }} .
+        docker tag vasilijed/counter-frontend:${{ github.sha }} vasilijed/counter-frontend:latest
 
     - name: Push Docker image
       shell: cmd
       run: |
-        docker push vasilijed/counter-backend:${{ github.sha }}
-        docker push vasilijed/counter-backend:latest
+        docker push vasilijed/counter-frontend:${{ github.sha }}
+        docker push vasilijed/counter-frontend:latest
 
     - name: Restart deployment
       shell: cmd
       run: |
         k3d kubeconfig get ci-cluster > %USERPROFILE%\.kube\config
-        kubectl rollout restart deployment/counter-backend-deployment -n %GITHUB_REF_NAME%
+        kubectl rollout restart deployment/counter-frontend-deployment -n %GITHUB_REF_NAME%
