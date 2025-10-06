@@ -13,6 +13,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Clean up old Docker images
+      shell: cmd
+      run: |
+        docker system prune -af
+
     - name: Log in to Docker Hub
       uses: docker/login-action@v2
       with:
@@ -30,12 +35,6 @@ jobs:
       run: |
         docker push vasilijed/counter-frontend:${{ github.sha }}
         docker push vasilijed/counter-frontend:latest
-
-    # - name: Restart deployment
-    #   shell: cmd
-    #   run: |
-    #     k3d kubeconfig get ci-cluster > %USERPROFILE%\.kube\config
-    #     kubectl rollout restart deployment/counter-frontend-deployment -n %GITHUB_REF_NAME%
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
