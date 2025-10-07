@@ -49,8 +49,8 @@ resource "kubernetes_service" "frontend_service_master" {
     }
     
     port {
-      port        = 3000
-      target_port = 3000
+      port        = 80
+      target_port = 80
     }
     
     type = "NodePort"
