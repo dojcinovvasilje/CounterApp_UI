@@ -1,4 +1,4 @@
 provider "kubernetes" {
   config_path    = "~/.kube/config"
-  config_context = "k3d-ci-cluster"
+  config_context = "minikube"
 }
