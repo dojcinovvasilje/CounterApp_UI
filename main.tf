@@ -29,7 +29,7 @@ resource "kubernetes_deployment" "frontend_deployment_master" {
           image_pull_policy = "Always"
           
           port {
-            container_port = 3000
+            container_port = 80
           }
         }
       }
