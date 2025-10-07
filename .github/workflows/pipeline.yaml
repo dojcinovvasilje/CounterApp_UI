@@ -32,18 +32,22 @@ jobs:
         docker push vasilijed/counter-frontend:latest
 
     - name: Setup Terraform
+      shell: cmd
       uses: hashicorp/setup-terraform@v2
       with:
         terraform_wrapper: false
 
-    - name: Init with Terraform  
+    - name: Init with Terraform
+      shell: cmd
       run: |
         terraform init -no-color
 
-    - name: Apply with Terraform  
+    - name: Apply with Terraform
+      shell: cmd
       run: |
         terraform apply -auto-approve -no-color
 
     - name: Restart Deployment
+      shell: cmd
       run: |
-        kubectl rollout restart deployment/counter-backend-deployment -n master
+        kubectl rollout restart deployment/counter-frontend-deployment -n master
