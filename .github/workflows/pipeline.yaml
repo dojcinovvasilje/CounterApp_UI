@@ -33,8 +33,17 @@ jobs:
 
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_wrapper: false
 
-    - name: Deploy with Terraform  
+    - name: Init with Terraform  
       run: |
-        terraform init
-        terraform apply -auto-approve
+        terraform init -no-color
+
+    - name: Apply with Terraform  
+      run: |
+        terraform apply -auto-approve -no-color
+
+    - name: Restart Deployment
+      run: |
+        kubectl rollout restart deployment/counter-backend-deployment -n master
