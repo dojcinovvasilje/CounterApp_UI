@@ -53,6 +53,6 @@ resource "kubernetes_service" "frontend_service_master" {
       target_port = 3000
     }
     
-    type = "ClusterIP"
+    type = "NodePort"
   }
 }
