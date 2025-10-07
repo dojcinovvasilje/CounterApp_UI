@@ -8,7 +8,6 @@ jobs:
   deploy-frontend:
     runs-on: self-hosted
     timeout-minutes: 3
-    
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -36,11 +35,6 @@ jobs:
       with:
         terraform_wrapper: false
 
-    - name: Deploy with Terraform  
-      run: |
-        terraform init
-        terraform apply -auto-approve
-        
     - name: Init with Terraform  
       run: |
         terraform init -no-color
@@ -48,3 +42,7 @@ jobs:
     - name: Apply with Terraform  
       run: |
         terraform apply -auto-approve -no-color
+
+    - name: Restart Deployment
+      run: |
+        kubectl rollout restart deployment/counter-backend-deployment -n master
