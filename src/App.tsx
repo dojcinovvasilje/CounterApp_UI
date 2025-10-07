@@ -9,7 +9,7 @@ import './App.css'
 //   ? 'http://localhost:8000/counter'
 //   : 'http://backend-service:8000/counter';
 
-const API_URL = 'http://backend-service:8000/counter';
+const API_BASE = '';
 
 console.log(window.location.hostname)
 
@@ -18,7 +18,7 @@ function App() {
 
   const fetchCounter = async () => {
     try {
-      const response = await fetch(API_URL)
+      const response = await fetch(`${API_BASE}/api/counter`)
       const data = await response.json()
       setCount(data.value)
     } catch (error) {
@@ -28,7 +28,7 @@ function App() {
 
   const incrementCounter = async () => {
     try {
-      const response = await fetch(`${API_URL}/increment`, {
+      const response = await fetch(`${API_BASE}/api/counter/increment`, {
         method: 'POST'
       })
       const data = await response.json()
