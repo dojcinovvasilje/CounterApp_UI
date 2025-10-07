@@ -32,7 +32,6 @@ jobs:
         docker push vasilijed/counter-frontend:latest
 
     - name: Setup Terraform
-      shell: cmd
       uses: hashicorp/setup-terraform@v2
       with:
         terraform_wrapper: false
