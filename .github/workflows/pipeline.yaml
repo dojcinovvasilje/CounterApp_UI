@@ -43,6 +43,6 @@ jobs:
       run: |
         terraform apply -auto-approve -no-color
 
-    - name: Restart Deployment
+    - name: Restart Frontend Deployment
       run: |
-        kubectl rollout restart deployment/counter-backend-deployment -n master
+        kubectl rollout restart deployment/counter-frontend-deployment -n master
